@@ -1,0 +1,205 @@
+
+
+//heart Blast Effect
+
+.heart-blast {
+    background-position: -105rem 0!important;
+    transition: background 1s steps(28);
+}
+
+.heart {
+    width   	: 3.75rem;
+    height  	: 3.75rem;
+    display 	: inline-block;
+    background  : url('../images/like.png');
+    cursor      : pointer;
+    margin      : -1.5625rem -0.9375rem;
+}
+.header-left{
+	.search-area{
+		.form-control,
+		.input-group-text{
+			background:#F2F6FC;
+		}
+	}
+}
+.plus-box{
+	background:var(--primary);
+    color: #fff;
+    font-size: 0.875rem;
+    padding:1.125rem 0rem 1.125rem 1.5625rem;
+    overflow: hidden;
+    margin: 0 1.875rem;
+    border-radius: 1.125rem;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
+	background-image: url('../images/plus.png');
+    background-repeat: no-repeat;
+    background-position: right bottom;
+	@include respond ('laptop'){
+		margin:1.25rem 1.25rem;
+	}
+}
+.breadcrumb{
+	font-size:1.125rem;
+	font-weight:400;
+	@include respond ('phone'){
+		font-size:0.8125rem;	
+	}
+}
+.text-head{
+	h2{
+		font-size:2.125rem;
+		font-weight:600;
+		@include respond ('phone'){
+			font-size:1.875rem;	
+		}
+	}
+}
+.revenue{
+	font-size:2.25rem;
+	@include respond ('phone'){
+		font-size:1.25rem;	
+	}
+}
+.revenue-1{
+	font-size:1.25rem;
+	@include respond ('phone'){
+		font-size:0.9375rem;	
+	}
+}
+.card-data{
+	h5{
+		color:#737B8B;
+	}
+}
+.coin-tabs{
+	.nav-tabs{
+		border:0;
+		.nav-link{
+			border:0;
+			border-bottom:0.0625rem solid var(--rgba-primary-2);
+			font-size:0.875rem;
+			font-weight:500;
+			padding: .6rem 1.5rem;
+			&.active{
+				color:var(--primary);
+				border-color:var(--primary);
+				border-bottom:0.25rem solid var(--primary);
+				background:transparent;
+				font-weight:600;
+			}
+		}
+	}
+}
+.building-icon{
+	i{
+		height:3.75rem;
+		width:3.75rem;
+		text-align: center;
+		line-height:3.75rem;
+		color:$white;
+		border-radius:1.375rem;
+		font-size:1.75rem;
+	}
+	@include respond ('phone'){
+		i{
+			height:2.5rem;
+			width:2.5rem;
+			line-height:2.5rem;
+			font-size:1.125rem;
+		}
+	}
+}
+
+.building{
+	h4{
+		font-size:1.125rem;
+		@include respond ('phone'){
+			font-size:0.875rem;	
+		}
+	}	
+}
+.star-icons{
+	i{
+		font-size:1.375rem;
+		color:#FF8723;
+	}
+}
+.recent-customer{
+	img{
+		height:3.125rem;
+		width:3.125rem;
+		border-radius:1.25rem;
+	}
+}
+.timeline-chart{
+	path{
+		fill:var(--primary);	
+	}		
+}
+
+//dotted-map
+.property-map{
+	.smallipop>img{
+		display:none;
+	}
+	.smallipop.smallimap-mapicon{
+		height:2rem!important;
+		width:2rem!important;
+		opacity:1!important;
+		.circle-marker{
+			height:2rem;
+			width:2rem;
+			display:block;
+			border-radius:50%;
+			background:var(--primary);
+			border:0.375rem solid #fff;
+			box-shadow: 0rem 0.625rem 3.0625rem rgba(94, 132, 194, 0.31);
+			@include transitionMedium;
+			&:hover{
+				transform:scale(1.5);
+			}
+			&.md{
+				height:1.75rem;
+				width:1.75rem;
+				border:0.375rem solid #fff;
+			}
+			&.sm{
+				height:1.375rem;
+				width:1.375rem;
+				border:0.375rem solid #fff;
+			}
+		}
+		@include respond ('phone-land'){
+			display:none;	
+		}
+	}
+}
+.smallipop-instance.blue .sipContent{
+	padding:0;
+	background-color:transparent;
+}
+.smallipop-instance.blue{
+	border-width:0!important;
+	box-shadow: 0rem 0.625rem 3.0625rem rgba(94, 132, 194, 0.31);
+	border-radius: $radius;
+    -o-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -webkit-border-radius: $radius;
+}
+.smallipop-instance{
+	max-width: 18.75rem;
+}
+.smallipop-instance.blue .btn-primary{
+	color:$white!important;
+}
+.map-card{
+	height:auto;
+	margin-bottom:0;
+	.smallimap-title{
+		font-weight:600;
+		line-height:1.5;
+	}
+}

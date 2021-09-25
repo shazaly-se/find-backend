@@ -1,0 +1,100 @@
+.order-user{
+	i{
+		height:4.875rem;
+		width:4.875rem;
+		border-radius:1.25rem;
+		text-align: center;
+		line-height: 4.875rem;
+		font-size: 1.75rem;
+		@include custommq ($max:100rem){
+			height:4rem;
+			width:4rem;
+			line-height:4rem;
+		}
+		@include respond ('phone'){
+			height:3.125rem;
+			width:3.125rem;
+			line-height:3.125rem;
+		}
+	}
+}
+.order-card{
+	&> div{
+		border-right:0.0625rem solid #EDF2F6;
+	}
+}
+.table-search{
+	width:40%;	
+	.input-group{
+		.input-group-text{
+			background:$white;
+			border-top-right-radius: 1.25rem;
+			border-bottom-right-radius: 1.25rem;
+			border:0;
+		}
+		.form-control{
+			border:0;
+			border-top-left-radius: 1.25rem;
+			border-bottom-left-radius: 1.25rem;
+		}
+	}
+	@include respond ('phone'){
+		width:100%;
+	}
+}
+.newest{
+	margin-left:auto;
+	margin-right:1.875rem;
+	.default-select{
+		padding-right:2.5rem;
+		border-radius: 1.25rem;
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #273240;
+		line-height:2.75rem;
+		margin-left:0.75rem;
+		@include respond ('laptop'){
+			line-height:2rem;
+		}
+	}
+	.nice-select{
+		&:after{
+			border-color:var(--primary);
+		}	
+	}
+	@include respond ('phone'){
+		margin-left:inherit;
+	}
+}
+.order-table{
+	tbody{
+		tr{
+			&:hover{
+				box-shadow:0 0 1.875rem rgba(14,138,116,0.1);
+				background:$white;
+			}
+			td{
+				color:#273240;
+			}
+		}
+	}
+}
+.wspace-no{
+	white-space:nowrap;
+}
+.customer{
+	h2{
+		font-size:2.25rem;	
+	}
+	p{
+		font-size:1rem;
+	}
+	@include respond ('phone'){
+		h2{
+			font-size:1.5rem;
+		}	
+		p{
+			font-size:0.6875rem;
+		}
+	}
+}

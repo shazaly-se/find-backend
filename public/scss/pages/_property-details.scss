@@ -1,0 +1,334 @@
+.front-view-slider{
+	margin-bottom: 3rem;
+	.front-view{
+		position:relative;
+		height: 35.625rem;
+		@include custommq ($max:100rem){
+			height: 27.5rem;
+		}
+		@include respond ('tab-land'){
+			height:18.75rem;
+		}
+		@include respond ('phone'){
+			height:16.25rem;
+		}
+		img{
+			height: 100%;
+			object-fit: cover;
+			border-radius:1.25rem;
+		}
+		.info{
+			position:absolute;
+			bottom:2.8125rem;
+			z-index:1;
+			padding-right: 5rem;
+			left: calc(25% + 15px);
+			h3{
+				font-size:1.875rem;	
+			}
+			span{
+				font-size:1.125rem;	
+			}
+			@include custommq ($max:100rem){
+				left: calc(33.33% + 15px);
+				bottom: 1.875rem;
+				h3{
+					font-size:1.625rem;	
+				}
+				span{
+					font-size:1rem;
+				}
+			}
+			@include respond ('tab-land'){
+				bottom: 1.875rem;
+				left: 1.875rem;
+				h3{
+					font-size:1.25rem;	
+				}
+			}
+			
+			@include respond ('phone'){
+				width: 100%;
+				padding: 0.9375rem 0.9375rem;
+				left: 0;
+				bottom: 0;
+				span{
+					font-size:0.625rem;	
+					color:rgba($white,0.6);
+					svg{
+						width:1rem;
+					}
+				}
+				h3{
+					font-size:1rem;	
+				}
+			}
+		}
+		.buttons{
+			position:absolute;
+			right: 6%;
+			bottom: 20%;
+			display:grid;
+			z-index:1;
+			@include custommq ($max:100rem){
+				right: 2.5rem;
+				bottom: 9.875rem;
+			}
+			@include respond ('tab-land'){
+				right: 1.875rem;
+				bottom:1.875rem;	
+			}
+			@include respond ('phone'){
+				bottom: auto;
+				top: 1.875rem;
+			}
+		}
+		&:after{
+			content:"";
+			position:absolute;
+			top:0;
+			z-index:0;
+			left:0;
+			height:100%;
+			border-radius:1.25rem;
+			width:100%;
+			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+49,000000+100&0+49,0.69+100 */
+			background: -moz-linear-gradient(top,  rgba(0,0,0,0) 49%, rgba(0,0,0,0.69) 100%); /* FF3.6-15 */
+			background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 49%,rgba(0,0,0,0.69) 100%); /* Chrome10-25,Safari5.1-6 */
+			background: linear-gradient(to bottom,  rgba(0,0,0,0) 49%,rgba(0,0,0,0.69) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#b0000000',GradientType=0 ); /* IE6-9 */
+
+
+
+			
+			
+		}
+	}
+	.owl-dots{
+		position: absolute;
+		display: flex;
+		bottom: 3.125rem;
+		right: 3.125rem;
+		.owl-dot{
+			height: 0.4375rem;
+			cursor: pointer;
+			width: 2.3125rem;
+			margin: 0 0.3125rem;
+			border-radius: 0.625rem;
+			-webkit-transition: all 0.5s;
+			-ms-transition: all 0.5s;
+			transition: all 0.5s;
+			background: rgba(255, 255, 255, 0.3);
+			&.active{
+				width: 4.1875rem;
+				background: #fff;
+			}
+		}
+		@include custommq ($max:100rem){
+			display:none;
+		}
+		@include respond ('tab-land'){
+			bottom:1.875rem;	
+		}
+
+	}
+	@include custommq ($max:100rem){
+		margin-bottom: 1.8rem;
+	}
+}
+
+.my-profile{
+	position:relative;
+	margin-top: -14.375rem;
+    z-index: 1;
+    position: relative;
+	.avtar{
+		img{ 
+			height:17rem;
+			width:15.0625rem;
+			border:0.5rem solid $white;
+			border-radius:1.25rem;
+			object-fit:cover;
+			box-shadow:0rem 0.625rem 3.0625rem rgba(94, 132, 194, 0.31);
+		}	
+	}
+	.property-social{
+		display:flex;
+		justify-content: center;
+		li{
+			a{
+				height: 3.5rem;
+				width: 3.5rem;
+				border-radius: 100%;
+				background:var(--rgba-primary-1);
+				color: #3B4CB8;
+				font-size: 1.875rem;
+				display: block;
+				text-align: center;
+				line-height: 3.5rem;
+				margin: 0rem 0.3125rem;
+			}
+		}
+		@include respond ('phone'){
+			margin-bottom:1.25rem;	
+		}
+	}
+	@include custommq ($max:100rem){
+		.avtar{
+			img{
+				height: 13.75rem;
+				width: 12.5rem;
+			}
+		}
+	}
+	@include respond ('tab-land'){
+		margin-top: 0;	
+	}
+	@include respond ('phone'){
+		.avtar{
+			img{
+				height: 7.5rem;
+				width: 7.5rem;
+			}
+		}
+	}
+}
+.price{
+	border-radius:1.25rem;
+}
+.image-gallery{
+	img{
+		height:9.5rem;
+		width:16.5625rem;
+		border-radius:1.25rem;
+		object-fit:cover;
+	}
+	.owl-prev{
+		left: 0.625rem;
+	}
+	.owl-next{
+		right: 0.625rem;
+	}
+	.owl-prev,
+	.owl-next{
+		position: absolute;
+		width: 3.125rem;
+		height: 3.125rem;
+		line-height: 3.125rem;
+		border-radius: 3.75rem;
+		top: 50%;
+		background: #fff;
+		color: #3B4CB8;
+		font-size: 1.125rem;
+		margin-top: -1.875rem;
+		text-align: center;
+		-webkit-transition: all 0.5s;
+		-ms-transition: all 0.5s;
+		transition: all 0.5s;
+		cursor: pointer;
+		@include respond ('phone'){
+			width: 1.875rem;
+			height: 1.875rem;
+			line-height: 1.875rem;	
+			top: 67%;
+			font-size: 0.8125rem;
+		}
+	}
+}
+.media{
+	display: flex;
+    align-items: flex-start;
+	img{
+		height:3.25rem;
+		width:3.25rem;
+		border-radius:1.25rem;
+	}
+}
+.responsive-map{
+	overflow: hidden;
+	position:relative;
+	height:12.5rem;
+	border-radius:1.25rem;
+}
+.responsive-map iframe{
+	left:0;
+	top:0;
+	width:100%;
+	position:absolute;
+	border-radius:1.25rem;
+}
+.property-features{
+	li{
+		width: 12.75rem;
+		display: flex;
+		align-items: center;
+		color: #000;
+		float: left;
+		padding: 0.625rem 0rem;
+		font-weight: 500;
+		i{
+			color: $success;
+			font-size: 1.625rem;
+			margin-right: 0.625rem;
+		}
+		@include custommq ($max:100rem){
+			width: 11.25rem;
+		}
+		@include respond ('phone'){
+			font-size:0.75rem;	
+			width:8.3125rem;
+			i{
+				font-size:1.125rem;	
+			}
+		}
+	}
+}
+.Price{
+	font-size:1.875rem;	
+}
+.sale{
+	span{
+		background: #FF8723;
+		height: 3.75rem;
+		position: absolute;
+		top: 0;
+		left: 0;
+		line-height: 3.5rem;
+		width: 9.75rem;
+		text-align: center;
+		color: white;
+		border-top-left-radius: 1.25rem;
+		border-bottom-right-radius: 1.25rem;
+		font-size:1.125rem;
+		font-weight:600;
+		@include respond ('phone'){
+			height: 2.5rem;
+			width: 7.5rem;
+			font-size: 0.6875rem;
+			line-height: 2.625rem;
+		}
+	}	
+}
+
+.owner-timeline{
+	&>div{
+		position:relative;
+		z-index:1;
+		&:after{
+			height:100%;
+			position:absolute;
+			top:0;
+			left:1.5625rem;
+			z-index:-1;
+			content:"";
+			border: 0.0625rem solid;
+			border-style: dashed;
+			border-color: #C4C4C4;
+		}
+		&:last-child{
+			&:after{
+				content:none;
+			}
+		}
+	}
+}
