@@ -17,6 +17,7 @@ use App\Http\Controllers\PropertystatusController;
 use App\Http\Controllers\AgentManagementController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\EmiratesController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\SpecialistController;
 use App\Http\Controllers\AgencyController;
@@ -27,12 +28,15 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\QuotaUsageController;
 use App\Http\Controllers\AllEmirateController;
 use App\Http\Controllers\AgenciesAgentController;
-use App\Http\Controllers\AgencyDataShowController;
+use App\Http\Controllers\AgencyDataShowController;  
+use App\Http\Controllers\WebsiteUserController;  
+use App\Http\Controllers\UserAuthController;  
+use App\Http\Controllers\MessageController;  
+use App\Http\Controllers\DashboardController; 
 
 
 
-
-// header("Access-Control-Allow-Origin");
+// header("Access-Control-Allow-Origin"); 
 // header('Access-Control-Allow-Methods', 'GET, POST, PUT,DELETE');
 // header('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -73,9 +77,10 @@ Route::group([
 });
 
 
+//Route::post('login', [AuthController::class,'login']);
 //add this middleware to ensure that every request is authenticated
 Route::middleware('auth:api')->group(function(){
-    //Route::get('me', [AuthController::class,'me']);
+    Route::post('dashboard', [DashboardController::class,'index']);
 });
 
 // admin dashboard
@@ -86,7 +91,7 @@ Route::get('employees/{id}',[EmployeeController::class,'show']);
 Route::get('edit-employee/{id}',[EmployeeController::class,'edit']);
 Route::put('employee/{id}',[EmployeeController::class,'update']);
 
-
+Route::get('cities',[EmiratesController::class,'index']);
 // all modules admin side
 
 Route::get('agency-agents',[AgenciesAgentController::class,'agents']);
@@ -106,7 +111,11 @@ Route::group(['middleware' => ['api','jwt.verify']], function() {
 Route::resource('features',FeatureController::class);
 Route::resource('status',StatusController::class);
 Route::resource('languages',LanguagesController::class);
+
 Route::resource('propertytypes',PropertytypesController::class);
+
+Route::get('allpropertytypes',[PropertytypesController::class,"allpropertytypes"]);
+
 Route::get('propertytypeByCatId/{catid}',[PropertytypesController::class,'propertytypeByCatId']);
 Route::get('agencies',[AgencyController::class,'index']);
 Route::post('agencies',[AgencyController::class,'store']);
@@ -127,8 +136,12 @@ Route::resource('propertystatus',PropertystatusController::class);
 // Route::resource('propertytype',PropertytypeController::class);
 // R
 
+Route::get('showagent/{id}',[AgentController::class,'showagent']);
+
 // agencies dashboard
 Route::get('managelisting',[ManageListingController::class,'index']);
+Route::post('filtermanagelisting',[ManageListingController::class,'filtermanagelisting']);
+
 Route::post('changestatus',[ManageListingController::class,'changestatus']);
 Route::post('changepackage',[ManageListingController::class,'changepackage']);
 Route::post('refresh',[ManageListingController::class,'refresh']);
@@ -147,6 +160,19 @@ Route::get('agencypropertystatus',[AgencyDataShowController::class,'propertystat
 Route::get('properties',[PropertyController::class,'index']);
 Route::post('properties',[PropertyController::class,'store']);
 Route::post('propertiesuploads',[PropertyController::class,'upload']);
+Route::get('properties/{id}',[PropertyController::class,'edit']);
+
+Route::delete('deletemedia/{id}',[PropertyController::class,'deletemedia']);
+Route::put('properties/{id}',[PropertyController::class,'update']);
+
+
+
+// chat app
+
+Route::get('users/{id}',[MessageController::class,'users']);
+Route::get('allmessages/{id}',[MessageController::class,'index']);
+
+Route::post('newmessage',[MessageController::class,'saveMessage']);
 
 // website 
 Route::get('allproperties',[AllPropertyController::class,'index']);
@@ -164,36 +190,52 @@ Route::post('filterproperties',[AllPropertyController::class,'filterproperties']
 
 
 Route::post('filter',[AllPropertyController::class,'filter']);
-
-
-
 Route::get('recentproperties',[AllPropertyController::class,'recent']);
-
-
 Route::post('allfiles',[AllPropertyController::class,'allfiles']);
-
-
 Route::get('test/{data}',[AllPropertyController::class,'test']);
-
-
 Route::post('upload',[PropertyController::class,'upload']);
-
 Route::get('emirates',[AllEmirateController::class,'index']);
 Route::get('area/{emirate_name}',[AllEmirateController::class,'area']);
-
 Route::get('streetorbuild_en/{streetorbuild_en}',[AllEmirateController::class,'streetorbuild_en']);
-
-
 Route::get('locations',[AllPropertyController::class,'location']);
-
 Route::get('getLocation/{switcher}/{data}',[AllPropertyController::class,'getlocation']);
+
+Route::get('propertymap',[AllPropertyController::class,'propertymap']);
 
 
 Route::get('agentinfo',[CountryController::class,'agentinfo']);
 
-Route::get('locationandagent',[AgentController::class,'locationandagent']);
 
+Route::get('locationandagent',[AgentController::class,'locationandagent']);
 Route::post('filterAgent',[AgentController::class,'filteragent']);
+Route::post('wishlist',[WebsiteUserController::class,'wishlist']);
+
+
+
+
+Route::group([
+
+    'middleware' =>'api'
+
+], function ($router) {
+
+    Route::post('login', [UserAuthController::class,'login']);
+    Route::post('register', [UserAuthController::class,'register']);
+    Route::post('logout', [UserAuthController::class,'logout']);
+    Route::post('refresh', [UserAuthController::class,'refresh']);
+    Route::post('me', [UserAuthController::class,'me']);
+
+});
+
+Route::group(['middleware' => ['api','jwt.verify']], function() {
+    Route::post('updateUser', [UserAuthController::class,'updateUser']);
+});
+
+Route::get('chatusers',[UserAuthController::class,'chatUsers']);
+
+
+
+
 
 
 

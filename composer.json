@@ -13,6 +13,8 @@
         "laravel/framework": "^8.40",
         "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
+        "pusher/pusher-php-server": "^7.0",
+        "stevebauman/location": "^6.2",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

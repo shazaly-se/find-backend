@@ -18,8 +18,6 @@ class AllEmirateController extends Controller
 
        return Propertylocation::join("emirates","emirates.emirate_en","propertylocations.emirate_en")
        ->distinct()->get();
-
-       // return $users = DB::table('users')->distinct()->get();
     }
 
     public function area($emirate_name)

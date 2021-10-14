@@ -22,7 +22,7 @@ class QuotaUsageController extends Controller
         ->join('packages','packages.id','=','properties.package_type')
         ->join('propertylocations','propertylocations.property_id','=','properties.id')
         ->select('propertylocations.area_en','propertylocations.area_ar', DB::raw('COUNT(properties.id) as last_post_created_at'),DB::raw('COUNT(propertydetails.purpose) as p'),)
-       // ->where('purpose', 2)
+ 
         ->groupBy('propertylocations.area_en','propertylocations.area_ar')->get();
          $emirates= DB::table("emirates")
     ->join("propertylocations","propertylocations.emirate_en","=","emirates.emirate_en")

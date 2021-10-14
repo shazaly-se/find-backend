@@ -170,6 +170,8 @@ return [
         /*
          * Application Service Providers...
          */
+        Stevebauman\Location\LocationServiceProvider::class,
+
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
@@ -234,6 +236,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Str' => Illuminate\Support\Str::class,
+        'Location' => 'Stevebauman\Location\Facades\Location',
+
 
     ],
 

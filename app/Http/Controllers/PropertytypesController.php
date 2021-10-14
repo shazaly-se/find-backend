@@ -18,6 +18,14 @@ class PropertytypesController extends Controller
         return response()->json(['propertytypes' => $propertytypes]);
     }
 
+    public function allpropertytypes()
+    {
+        $propertytypes = Propertytype::all();
+        return response()->json(['propertytypes' => $propertytypes]);
+    }
+
+
+
 
     public function propertytypeByCatId($id)
     {

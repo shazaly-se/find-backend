@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 //use Laravel\Passport\HasApiTokens;
-
+use Cache;
 class User extends Authenticatable implements JWTSubject
 {
     use  HasFactory, Notifiable;
@@ -62,6 +62,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function isOnline()
+{
+    return Cache::has('user-is-online-' . $this->id);
+}
 
 
 }

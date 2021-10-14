@@ -24,9 +24,7 @@ class CategoriesController extends Controller
     }
     public function index()
     {
-        //return "categories";
-        $categories = Category::all();//get(array('categories.id as value','categories.name_en as label'));
-        //return view("categories.index",compact('categories'));
+        $categories = Category::all();
         return response()->json(['categories' => $categories]);
     }
 

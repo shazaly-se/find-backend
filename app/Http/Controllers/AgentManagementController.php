@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Agency;
 use App\Models\Agent;
 use App\Models\User;
 use App\Models\AgentLanguage;
@@ -16,15 +17,19 @@ class AgentManagementController extends Controller
 {
     public function index()
     {
+        $useragency = auth()->user();
+        $agencynew=Agency::where('user_id',$useragency->id)->first();
+
         $agents = Agent::join('users','users.id','agents.user_id')
+        ->where("agency_id",$agencynew->id)
         ->get(array('agents.*','users.email as email','users.active as active','users.profile as profile'));
         return response()->json(["agents" => $agents]);
     }
     public function store(Request $request)
     {
-     
-       // return $request->all();
-       
+       $logeduser = auth()->user();
+       $agency = Agency::where("user_id",$logeduser->id)->first();
+
        $languagesarray  = $request->selected;
        $specialistsarray  = $request->selectedspecialists;
        $agent = new Agent;
@@ -45,13 +50,15 @@ class AgentManagementController extends Controller
         if($user->save()){
 
             $agent->user_id=$user->id;
-            $agent->name=$request->name;
+            $agent->agency_id=$agency->id;
+            $agent->name_en=$request->name;
             $agent->name_ar=$request->name_ar;
             $agent->email=$request->email;
             $agent->mobile=$request->mobile;
             $agent->whatsapp=$request->whatsapp;
             $agent->land=$request->land;
             $agent->gender=$request->gender;
+            $agent ->address = $request->address;
             $agent->nationality=$request->nationality;
             $agent->experience=$request->experience;
             $agent->facebook=$request->facebook;
@@ -59,6 +66,14 @@ class AgentManagementController extends Controller
             $agent->instegram=$request->instegram;
             $agent->linkedin=$request->linkedin;
             $agent->qouta=$request->qouta;
+            if($request->get('image'))
+            {
+               $image = $request->get('image');
+               $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+               \Image::make($request->get('image'))->save(public_path('uploads/profiles/').$name);
+               $agent->profile=$name;
+             }
+
       
             if($agent->save()){
                 foreach ($languagesarray as $key => $value) {
@@ -68,7 +83,7 @@ class AgentManagementController extends Controller
                     );
                 }
 
-                foreach ($languagesarray as $key => $value) {
+                foreach ($specialistsarray as $key => $value) {
                     AgentSpecialist::insertGetId(
                        ['agent_id' => $agent->id,
                        'specialist_id' => $value['value']]
@@ -92,11 +107,12 @@ class AgentManagementController extends Controller
     {
         $agents = Agent::join('users','users.id','agents.user_id')
         ->join('countries','countries.id','agents.nationality')
+        ->join('emirates','emirates.id','agents.address')
         ->where('agents.id',$id)
         ->first(array('agents.*','users.email as email',
         'users.active as active','users.profile as profile',
         'countries.id as country_id','countries.country_enNationality as country_enNationality',
-        'countries.country_arNationality as country_arNationality'));
+        'countries.country_arNationality as country_arNationality',"emirates.id as address_id","emirates.emirate_en","emirates.emirate_ar"));
 
   
         $languages_en= AgentLanguage::join("languages","languages.value",'=','agentlanguages.language_id')
@@ -125,18 +141,16 @@ class AgentManagementController extends Controller
     {
         $languagesarray  = $request->selected;
         $specialistsarray  = $request->selectedspecialists;
-
         $agent =  Agent::findOrFail($id);
         $user =  User::where('id',$agent->user_id)->first();
-        //return $request->all();
-
-        $agent->name=$request->name;
+        $agent->name_en=$request->name;
         $agent->name_ar=$request->name_ar;
         $agent->email=$request->email;
         $agent->mobile=$request->mobile;
         $agent->whatsapp=$request->whatsapp;
         $agent->land=$request->land;
         $agent->gender=$request->gender;
+        $agent ->address = $request->address;
         $agent->nationality=$request->nationality;
         $agent->experience=$request->experience;
         $agent->facebook=$request->facebook;
@@ -144,19 +158,24 @@ class AgentManagementController extends Controller
         $agent->instegram=$request->instegram;
         $agent->linkedin=$request->linkedin;
         $agent->qouta=$request->qouta;
-
-       if ($agent->update()){
-
-        $user->name = $request->name;
-        $user->email =$request->email;
-        $user->active=$request->active;
- 
         if($request->get('image'))
         {
            $image = $request->get('image');
            $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
            \Image::make($request->get('image'))->save(public_path('uploads/profiles/').$name);
-           $user->image=$name;
+           $agent->profile=$name;
+         }
+         
+       if ($agent->update()){
+        $user->name = $request->name;
+        $user->email =$request->email;
+        $user->active=$request->active;
+        if($request->get('image'))
+        {
+           $image = $request->get('image');
+           $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+           \Image::make($request->get('image'))->save(public_path('uploads/profiles/').$name);
+           $user->profile=$name;
          }
          $user->update();
 
@@ -170,7 +189,7 @@ class AgentManagementController extends Controller
            );
        }
 
-       foreach ($languagesarray as $key => $value) {
+       foreach ($specialistsarray as $key => $value) {
            AgentSpecialist::insertGetId(
               ['agent_id' => $agent->id,
               'specialist_id' => $value['value']]

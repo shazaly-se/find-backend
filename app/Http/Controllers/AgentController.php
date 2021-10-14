@@ -49,8 +49,6 @@ class AgentController extends Controller
           }
       public function filteragent(Request $request)
       {
-       // return $request->all();
-
        if($request->agentAgentViewSwitcher == "agency"){
 
         $agencies = Agency::join("propertylocations","propertylocations.agency_id","=","agencies.id")
@@ -61,15 +59,12 @@ class AgentController extends Controller
         ->withCount('agents')->withCount('property')->get();
         
         $agents = Agent::join('countries','countries.id','=','agents.nationality')
-        ->join('agentlanguages','agentlanguages.agent_id','=','agents.id')
-        ->join('languages','languages.value','=','agentlanguages.language_id')
+        ->leftJoin('agentlanguages','agentlanguages.agent_id','=','agents.id')
+        ->leftJoin('languages','languages.value','=','agentlanguages.language_id')
         ->join('agencies','agencies.id','agents.agency_id')
-        ->join('jobs','jobs.id','agents.job_id')
+        ->leftJoin('jobs','jobs.id','agents.job_id')
         ->join('propertylocations','propertylocations.agent_id','agents.id')
         ->where(function ($query1) use($request){
-        // if($request->selectedNationality > 0){ $query1->where('agents.nationality', $request->selectedNationality); }
-        // if($request->selectedArea > 0){ $query1->where('selectedArea', $request->selectedArea); }
-        // if($request->selectedLanguage  >0){  $query1->where('agentlanguages.language_id', $request->selectedLanguage); }
         if($request->selectedLocation  !=null){ 
            $query1->where('propertylocations.emirate_en','LIKE', '%'.$request->selectedLocation.'%' )
            ->orWhere('propertylocations.area_en','LIKE', '%'.$request->selectedLocation.'%' )
@@ -91,14 +86,17 @@ class AgentController extends Controller
        else{
         
 
-        $agencies = Agency::join('users','users.id','agencies.user_id')->select('agencies.*','users.active')
+        $agencies = Agency::join("propertylocations","propertylocations.agency_id","=","agencies.id")
+        ->join('users','users.id','agencies.user_id')
+        ->distinct()
+        ->select('agencies.*','users.active')
         ->withCount('agents')->withCount('property')->get();
         
         $agents = Agent::join('countries','countries.id','=','agents.nationality')
-        ->join('agentlanguages','agentlanguages.agent_id','=','agents.id')
-        ->join('languages','languages.value','=','agentlanguages.language_id')
+        ->leftJoin('agentlanguages','agentlanguages.agent_id','=','agents.id')
+        ->leftJoin('languages','languages.value','=','agentlanguages.language_id')
         ->join('agencies','agencies.id','agents.agency_id')
-        ->join('jobs','jobs.id','agents.job_id')
+        ->leftJoin('jobs','jobs.id','agents.job_id')
         ->join('propertylocations','propertylocations.agent_id','agents.id')
         ->where(function ($query1) use($request){
         if($request->selectedNationality > 0){ $query1->where('agents.nationality', $request->selectedNationality); }
@@ -130,6 +128,14 @@ class AgentController extends Controller
 
        }
      
+      }
+
+      public function showagent($id)
+      {
+        $agent = Agent::join("users","users.id","=","agents.user_id")
+        ->where("agents.id",$id)
+        ->first(array("agents.*","users.email"));
+        return response()->json($agent);
       }
 
 

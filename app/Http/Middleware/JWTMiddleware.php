@@ -5,6 +5,11 @@ namespace App\Http\Middleware;
 use Closure;
 use JWTAuth;
 use Exception;
+use App\Models\User;
+use Auth;
+use Cache;
+use Carbon\Carbon;
+
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class JWTMiddleware extends BaseMiddleware
@@ -21,6 +26,11 @@ class JWTMiddleware extends BaseMiddleware
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
+              $expiresAt = now()->addMinutes(2); /* already given time here we already set 2 min. */
+            Cache::put('user-is-online-' . Auth::user()->id, true, $expiresAt);
+  
+            /* user last seen */
+            User::where('id', Auth::user()->id)->update(['last_seen' => now()]);
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
                 return response()->json(['status' => 'Token is Invalid']);

@@ -16,6 +16,8 @@
         "postcss": "^8.1.14"
     },
     "dependencies": {
-        "datatables.net-dt": "^1.1.0"
+        "datatables.net-dt": "^1.1.0",
+        "laravel-echo": "^1.11.2",
+        "pusher-js": "^7.0.3"
     }
 }

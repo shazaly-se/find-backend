@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriesController;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Events\Message;
+use App\Http\Controllers\UserAuthController;  
+use App\Http\Controllers\GeoLocationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,10 +19,25 @@ use App\Http\Controllers\CategoriesController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 
-Route::resource('categories',CategoriesController::class);
+// Route::post("send-message",function(Request $request){
+//     event(new Message($request->input('username'),$request->input('message')));
+//     return ["success" =>true];
+// });
 
+Route::post("send-message",function(Request $request){
+    event(new Message($request->input('username'),$request->input('message')));
+    return ["success" =>true];
+});
+
+//Route::get("users",)
+//Route::get('/status', 'UserController@userOnlineStatus');
+Route::get('userstatus', [UserAuthController::class,'userOnlineStatus']);
+//Route::resource('categories',CategoriesController::class);
+
+ 
+Route::get('get-address-from-ip', [GeoLocationController::class, 'index']);
 

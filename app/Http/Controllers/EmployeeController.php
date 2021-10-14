@@ -92,13 +92,7 @@ class EmployeeController extends Controller
     }
     public function update(Request $request, $id)
     {
-        //return $request->all();
-        // $category = Category::findOrFail($id);
-        // $category->update($request->all());
-        // return response()->json("successfully updated");
-
-       
-        //return $user;
+     
         $employee =  Employee::find($id);
         $user = User::where('id',$employee->user_id)->first();
         
@@ -121,7 +115,6 @@ class EmployeeController extends Controller
          }
             if($user->update()){
                 return "data updated";
-                //$employee ->user_id = $user->id;
               
             }
         }

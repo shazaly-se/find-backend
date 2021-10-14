@@ -8,10 +8,10 @@ use App\Models\Agent;
 use App\Models\Language;
 class CountryController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
     public function countries()
     {
         return response()->json(['countries'=>Country::all()]);

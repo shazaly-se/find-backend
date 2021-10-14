@@ -18,8 +18,10 @@ class AgencyController extends Controller
 {
     public function index()
     {
-      $agencies = Agency::join('users','users.id','agencies.user_id')->select('agencies.*','users.active')
+      $agencies = Agency::join('users','users.id','agencies.user_id')->select('agencies.*','users.active','users.email')
        ->withCount('agents')->withCount('property')->get();
+
+       //return $agencies;
        
        $agents = Agent::join('users','users.id','agents.user_id')
        ->join('countries','countries.id','agents.nationality')
@@ -45,6 +47,7 @@ class AgencyController extends Controller
         $user->name = $request->name;
         $user->email =$request->email;
         $user->role = 2;
+        $user->active = $request->active;
         $user->password = Hash::make($request->password);
  
         if($request->get('image'))
@@ -65,14 +68,23 @@ class AgencyController extends Controller
 
             $agency ->tradelicense = $request->tradelicense;
             $agency ->paytype = $request->paytype;
-            $agency ->address_en = $request->address_en;
-            $agency ->address_ar = $request->address_ar;
+            $agency ->address = $request->address;
 
             $agency ->totalpackage = $request->totalpackage;
             $agency ->basic = $request->basic;
             $agency ->featured = $request->featured;
             $agency ->premium = $request->premium;
-      
+
+            if($request->get('image'))
+            {
+               $image = $request->get('image');
+               $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+               \Image::make($request->get('image'))->save(public_path('uploads/profiles/').$name);
+               $agency ->logo=$name;
+             }
+
+            //$agency ->logo = $request->premium;
+
             $agency->save();
             
             // $email = 'shazaly.se@gmail.com';
@@ -91,8 +103,9 @@ class AgencyController extends Controller
     public function edit($id)
     {
       $agency = Agency::join('users','users.id','agencies.user_id')
+      ->join('emirates','emirates.id','agencies.address')
       ->where('agencies.id',$id)
-      ->first(array('agencies.*','users.email','users.profile','users.active'));
+      ->first(array('agencies.*','users.email','users.profile','users.active',"emirates.id as address_id","emirates.emirate_en","emirates.emirate_ar"));
        
         return response()->json($agency);
     }
@@ -100,49 +113,18 @@ class AgencyController extends Controller
     public function show($id){
 
       $agency = Agency::join('users','users.id','agencies.user_id')
+      ->join('emirates','emirates.id','agencies.address')
       ->where('agencies.id',$id)
-      ->select('agencies.*','users.profile')->withCount('agents')->withCount('property')->get();
-
-     // return $agency;
+      ->select('agencies.*','users.profile',"emirates.id as address_id","emirates.emirate_en","emirates.emirate_ar")->withCount('agents')->withCount('property')->get();
 
       $agency_name = Agency::join('users','users.id','agencies.user_id')
       ->where('agencies.id',$id)
       ->first("agencies.*",);
-      //return $agency;
-
-      // $agency = Agency::join('users','users.id','agencies.user_id')
-      // ->where('agencies.id',$id)
-      // ->first(array('agencies.*','users.email','users.profile'));
-      $properties = Property::where("agency_id",$id)->get();
-
-      // $agents = Agent::join('users','users.id','agents.user_id')
-      // ->where("agency_id",$id)->get(array("agents.*",'users.email','users.profile'));
-      //return $agents;
-  
-      // foreach($agents as $agent){
-      //   $agent->users = DB::table('agents')
-      //   ->join('properties','properties.agent_id','=','agents.id')
-      //   ->where("properties.agent_id",$agent->id)
-      //   ->get();
-
+      $properties = Property::join("propertydetails","propertydetails.property_id","=","properties.id")
+      ->where("agency_id",$id)->get(array("properties.*","propertydetails.beds","propertydetails.baths","propertydetails.area","propertydetails.purpose"));
       $agents = Agent::join('users','users.id','agents.user_id')
       ->where('agents.agency_id',$id)
       ->select('agents.*','users.profile')->with('language')->withCount('agentproperty')->get();
-
-      //return $agents;
-     
-    //   $agents = DB::table('agents')
-    //   ->join('users','users.id','agents.user_id')
-    //   ->join('properties','properties.agent_id','=','agents.id')
-    // ->select(array('agents.id','agents.name','agents.facebook','agents.twitter','agents.instegram','agents.linkedin','agents.email','agents.mobile','users.profile', DB::raw('COUNT(properties.id) as total_of_properties')))
-    
- 
-    // ->groupBy('agents.id','agents.name','agents.facebook','agents.twitter','agents.instegram','agents.linkedin','agents.email','agents.mobile','users.profile')
-    // ->where("agents.agency_id",$id)
-    // ->orderBy('total_of_properties', 'desc')
-    // ->get();
-
-
       return response()->json(['agency_name'=>$agency_name,"agency" =>$agency,"properties" =>$properties,"agents" =>$agents]);
 
     }
@@ -164,8 +146,8 @@ class AgencyController extends Controller
 
         $agency ->tradelicense = $request->tradelicense;
         $agency ->paytype = $request->paytype;
-        $agency ->address_en = $request->address_en;
-        $agency ->address_ar = $request->address_ar;
+        $agency ->address = $request->address;
+        
 
         $agency ->totalpackage = $request->totalpackage;
         $agency ->basic = $request->basic;
@@ -187,7 +169,6 @@ class AgencyController extends Controller
          }
             if($user->update()){
                 return "data updated";
-                //$employee ->user_id = $user->id;
               
             }
         }
