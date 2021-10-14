@@ -284,22 +284,22 @@ class AllPropertyController extends Controller
          if($request->priceFrom > 0 && $request->priceTo  > 0 ){ $query->whereBetween('price', [$request->priceFrom , $request->priceTo ]); }
          if($request->priceFrom > 0 && $request->priceTo  == 0 ){ $query->where('price', '>=' ,$request->priceFrom ); }
          if($request->priceFrom == 0 && $request->priceTo  > 0 ){ $query->where('price', '<=' ,$request->priceTo ); }
-         if(count($request->subLocationSend) > 0){
-         if($request->subLocationSend["type"] == 1)
-         { 
-             $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
-         }
-                 if($request->subLocationSend["type"] == 2)
-                 { 
-                     $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
-                 }
-         if($request->subLocationSend["type"] == 3)
-         { 
-             $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
-         }
+        //  if(count($request->subLocationSend) > 0){
+        //  if($request->subLocationSend["type"] == 1)
+        //  { 
+        //      $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
+        //  }
+        //          if($request->subLocationSend["type"] == 2)
+        //          { 
+        //              $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
+        //          }
+        //  if($request->subLocationSend["type"] == 3)
+        //  { 
+        //      $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
+        //  }
          
         
-        }
+        // }
     
          })
          ->where(function ($query2) use($locationsArr){
@@ -558,22 +558,22 @@ class AllPropertyController extends Controller
          if($request->priceFrom == 0 && $request->priceTo  > 0 ){ $query->where('price', '<=' ,$request->priceTo ); }
 
 
-         if(count($request->subLocationSend) > 0){
-         if($request->subLocationSend["type"] == 1)
-         { 
-             $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
-         }
-                 if($request->subLocationSend["type"] == 2)
-                 { 
-                     $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
-                 }
-         if($request->subLocationSend["type"] == 3)
-         { 
-             $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
-         }
+        //  if(count($request->subLocationSend) > 0){
+        //  if($request->subLocationSend["type"] == 1)
+        //  { 
+        //      $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
+        //  }
+        //          if($request->subLocationSend["type"] == 2)
+        //          { 
+        //              $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
+        //          }
+        //  if($request->subLocationSend["type"] == 3)
+        //  { 
+        //      $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
+        //  }
          
         
-        }
+        // }
     
          })
          ->where(function ($query2) use($locationsArr){
@@ -835,22 +835,22 @@ class AllPropertyController extends Controller
          if($request->priceFrom == 0 && $request->priceTo  > 0 ){ $query->where('price', '<=' ,$request->priceTo ); }
 
 
-         if(count($request->subLocationSend) > 0){
-         if($request->subLocationSend["type"] == 1)
-         { 
-             $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
-         }
-                 if($request->subLocationSend["type"] == 2)
-                 { 
-                     $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
-                 }
-         if($request->subLocationSend["type"] == 3)
-         { 
-             $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
-         }
+        //  if(count($request->subLocationSend) > 0){
+        //  if($request->subLocationSend["type"] == 1)
+        //  { 
+        //      $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
+        //  }
+        //          if($request->subLocationSend["type"] == 2)
+        //          { 
+        //              $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
+        //          }
+        //  if($request->subLocationSend["type"] == 3)
+        //  { 
+        //      $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
+        //  }
          
         
-        }
+        // }
     
          })
          ->where(function ($query2) use($locationsArr){
@@ -1112,22 +1112,22 @@ class AllPropertyController extends Controller
          if($request->priceFrom == 0 && $request->priceTo  > 0 ){ $query->where('price', '<=' ,$request->priceTo ); }
 
 
-         if(count($request->subLocationSend) > 0){
-         if($request->subLocationSend["type"] == 1)
-         { 
-             $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
-         }
-                 if($request->subLocationSend["type"] == 2)
-                 { 
-                     $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
-                 }
-         if($request->subLocationSend["type"] == 3)
-         { 
-             $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
-         }
+        //  if(count($request->subLocationSend) > 0){
+        //  if($request->subLocationSend["type"] == 1)
+        //  { 
+        //      $query->where('propertylocations.emirate_en', $request->subLocationSend["location"]);
+        //  }
+        //          if($request->subLocationSend["type"] == 2)
+        //          { 
+        //              $query->where('propertylocations.area_en', $request->subLocationSend["location"]);
+        //          }
+        //  if($request->subLocationSend["type"] == 3)
+        //  { 
+        //      $query->where('propertylocations.streetorbuild_en',$request->subLocationSend["location"]);
+        //  }
          
         
-        }
+        // }
     
          })
          ->where(function ($query2) use($locationsArr){
