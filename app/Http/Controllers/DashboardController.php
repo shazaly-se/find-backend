@@ -94,7 +94,12 @@ class DashboardController extends Controller
 
         }else
         if($user->role == 2){
-           // return "agency";
+          // $request->validate([
+          //      'email'=>'required',
+          //      'password'=>'required'
+          //  ]); 
+           // return "agency"
+       
             $agency = Agency::where("user_id",$user->id)->first();
            // return $agency;
            if($agency){
@@ -149,46 +154,192 @@ class DashboardController extends Controller
                                   ->groupBy('purposes.name')
                                   ->get();   
 
-                                 $bymonths=Property::join("propertydetails","propertydetails.property_id",'=',"properties.id")
-                                 ->join("purposes","purposes.id",'=',"propertydetails.purpose")
-                                 ->select(
-                                   
-                                  //  DB::raw("(Count(purposes.name)) as rent"),
-                                    DB::raw("(DATE_FORMAT(properties.created_at, '%m-%Y')) as name")
-                                    )
-                                    ->orderBy('properties.created_at')
-                                   // ->where("purpose",1)
-                                    ->where('agency_id', $agency->id)
-                                    ->groupBy(DB::raw("DATE_FORMAT(properties.created_at, '%m-%Y')"))
-                                    ->get();
+                                  $propertyviews = DB::table('propertyviews')
+                                  ->select('country', DB::raw('COUNT(property_id) as count_property_viewed'))
+                                  ->orderBy(DB::raw('COUNT(property_id)'),"desc")
+                                  ->groupBy('country')
+                                     ->get();
 
-                            foreach( $bymonths as  $bymonth){
 
-                            
-                                    $bymonth->rent = DB::table('properties')
-                                    ->join("propertydetails","propertydetails.property_id","=","properties.id")
-                                          ->select('purpose', DB::raw('COUNT(properties.id) as rent_count'))
-                                          ->where('propertydetails.purpose', 1)
-                                          ->where('agency_id', $agency->id)
-                                          ->where(DB::raw("DATE_FORMAT(properties.created_at, '%m-%Y')"), $bymonth->name)
-                                          ->groupBy('purpose')->get();
 
-                                          $bymonth->sale = DB::table('properties')
-                                          ->join("propertydetails","propertydetails.property_id","=","properties.id")
-                                                ->select('purpose', DB::raw('COUNT(properties.id) as sale_count'))
-                                                ->where('propertydetails.purpose', 2)
-                                                ->where('agency_id', $agency->id)
-                                                ->where(DB::raw("DATE_FORMAT(properties.created_at, '%m-%Y')"), $bymonth->name)
-                                                ->groupBy('purpose')->get();
+if($request->selectedTime == 1){
+  
+  $groupdatabys=Property::join("propertydetails","propertydetails.property_id",'=',"properties.id")
+  ->join("purposes","purposes.id",'=',"propertydetails.purpose")
+  ->select(
+    
+   //  DB::raw("(Count(purposes.name)) as rent"),
+     DB::raw("(DATE_FORMAT(properties.created_at, '%m-%Y')) as name")
+     )
+     ->orderBy('properties.created_at')
+    // ->where("purpose",1)
+     ->where('agency_id', $agency->id)
+     ->groupBy(DB::raw("DATE_FORMAT(properties.created_at, '%m-%Y')"))
+     ->get();
 
-                            }
+
+     
+
+
+
+foreach( $groupdatabys as  $groupdataby){
+
+
+     $groupdataby->rent = DB::table('properties')
+     ->join("propertydetails","propertydetails.property_id","=","properties.id")
+           ->select('purpose', DB::raw('COUNT(properties.id) as rent_count'))
+           ->where('propertydetails.purpose', 1)
+           ->where('agency_id', $agency->id)
+           ->where(DB::raw("DATE_FORMAT(properties.created_at, '%m-%Y')"), $groupdataby->name)
+           ->groupBy('purpose')->get();
+
+           $groupdataby->sale = DB::table('properties')
+           ->join("propertydetails","propertydetails.property_id","=","properties.id")
+                 ->select('purpose', DB::raw('COUNT(properties.id) as sale_count'))
+                 ->where('propertydetails.purpose', 2)
+                 ->where('agency_id', $agency->id)
+                 ->where(DB::raw("DATE_FORMAT(properties.created_at, '%m-%Y')"), $groupdataby->name)
+                 ->groupBy('purpose')->get();
+
+}
+return response()->json(["agents"=>$agents,"properties" =>$properties,"total_agents"=>$total,"sales" =>$sales,"rents" =>$rents,"locations"=>[],"purpose"=>[],"groupdataby"=>$groupdatabys,"propertyviews"=> $propertyviews]);
+
+
+} else
+if($request->selectedTime == 2){
+ 
+  $groupdatabys=Property::join("propertydetails","propertydetails.property_id",'=',"properties.id")
+  ->join("purposes","purposes.id",'=',"propertydetails.purpose")
+  ->select(
+    
+   //  DB::raw("(Count(purposes.name)) as rent"),
+     DB::raw("(MONTH(properties.created_at)) as name")
+     )
+     ->orderBy('properties.created_at')
+    // ->where("purpose",1)
+     ->where('agency_id', $agency->id)
+     ->groupBy(DB::raw("MONTH(properties.created_at)"))
+     ->get();
+
+
+     
+
+
+
+foreach( $groupdatabys as  $groupdataby){
+
+
+     $groupdataby->rent = DB::table('properties')
+     ->join("propertydetails","propertydetails.property_id","=","properties.id")
+           ->select('purpose', DB::raw('COUNT(properties.id) as rent_count'))
+           ->where('propertydetails.purpose', 1)
+           ->where('agency_id', $agency->id)
+           ->where(DB::raw("MONTH(properties.created_at)"), $groupdataby->name)
+           ->groupBy('purpose')->get();
+
+           $groupdataby->sale = DB::table('properties')
+           ->join("propertydetails","propertydetails.property_id","=","properties.id")
+                 ->select('purpose', DB::raw('COUNT(properties.id) as sale_count'))
+                 ->where('propertydetails.purpose', 2)
+                 ->where('agency_id', $agency->id)
+                 ->where(DB::raw("MONTH(properties.created_at)"), $groupdataby->name)
+                 ->groupBy('purpose')->get();
+
+}
+return response()->json(["agents"=>$agents,"properties" =>$properties,"total_agents"=>$total,"sales" =>$sales,"rents" =>$rents,"locations"=>[],"purpose"=>[],"groupdataby"=>$groupdatabys,"propertyviews"=> $propertyviews]);
+
+
+} else
+if($request->selectedTime == 3){
+  $groupdatabys=Property::join("propertydetails","propertydetails.property_id",'=',"properties.id")
+  ->join("purposes","purposes.id",'=',"propertydetails.purpose")
+  ->select(
+    
+   //  DB::raw("(Count(purposes.name)) as rent"),
+     DB::raw("(DATE_FORMAT(properties.created_at, 'w')) as name")
+     )
+     ->orderBy('properties.created_at')
+    // ->where("purpose",1)
+     ->where('agency_id', $agency->id)
+     ->groupBy(DB::raw("DATE_FORMAT(properties.created_at, 'w')"))
+     ->get();
+
+
+     
+
+
+
+foreach( $groupdatabys as  $groupdataby){
+
+
+     $groupdataby->rent = DB::table('properties')
+     ->join("propertydetails","propertydetails.property_id","=","properties.id")
+           ->select('purpose', DB::raw('COUNT(properties.id) as rent_count'))
+           ->where('propertydetails.purpose', 1)
+           ->where('agency_id', $agency->id)
+           ->where(DB::raw("DATE_FORMAT(properties.created_at, 'w')"), $groupdataby->name)
+           ->groupBy('purpose')->get();
+
+           $groupdataby->sale = DB::table('properties')
+           ->join("propertydetails","propertydetails.property_id","=","properties.id")
+                 ->select('purpose', DB::raw('COUNT(properties.id) as sale_count'))
+                 ->where('propertydetails.purpose', 2)
+                 ->where('agency_id', $agency->id)
+                 ->where(DB::raw("DATE_FORMAT(properties.created_at, 'w')"), $groupdataby->name)
+                 ->groupBy('purpose')->get();
+
+}
+return response()->json(["agents"=>$agents,"properties" =>$properties,"total_agents"=>$total,"sales" =>$sales,"rents" =>$rents,"locations"=>[],"purpose"=>[],"groupdataby"=>$groupdatabys,"propertyviews"=> $propertyviews]);
+
+
+} else
+if($request->selectedTime == 4){
+  $groupdatabys=Property::join("propertydetails","propertydetails.property_id",'=',"properties.id")
+  ->join("purposes","purposes.id",'=',"propertydetails.purpose")
+  ->select(
+    
+   //  DB::raw("(Count(purposes.name)) as rent"),
+     DB::raw("(DATE_FORMAT(properties.created_at, '%Y-%m-%d')) as name")
+     )
+     ->orderBy('properties.created_at')
+    // ->where("purpose",1)
+     ->where('agency_id', $agency->id)
+     ->groupBy(DB::raw("DATE_FORMAT(properties.created_at, '%Y-%m-%d')"))
+     ->get();
+
+foreach( $groupdatabys as  $groupdataby){
+     $groupdataby->rent = DB::table('properties')
+     ->join("propertydetails","propertydetails.property_id","=","properties.id")
+           ->select('purpose', DB::raw('COUNT(properties.id) as rent_count'))
+           ->where('propertydetails.purpose', 1)
+           ->where('agency_id', $agency->id)
+           ->where(DB::raw("DATE_FORMAT(properties.created_at, '%Y-%m-%d')"), $groupdataby->name)
+           ->groupBy('purpose')->get();
+
+           $groupdataby->sale = DB::table('properties')
+           ->join("propertydetails","propertydetails.property_id","=","properties.id")
+                 ->select('purpose', DB::raw('COUNT(properties.id) as sale_count'))
+                 ->where('propertydetails.purpose', 2)
+                 ->where('agency_id', $agency->id)
+                 ->where(DB::raw("DATE_FORMAT(properties.created_at, '%Y-%m-%d')"), $groupdataby->name)
+                 ->groupBy('purpose')->get();
+
+}
+return response()->json(["agents"=>$agents,"properties" =>$properties,"total_agents"=>$total,"sales" =>$sales,"rents" =>$rents,"locations"=>[],"purpose"=>[],"groupdataby"=>$groupdatabys,"propertyviews"=> $propertyviews]);
+
+
+} 
+
+
+
+                                    
+
 
 
                                   
                                   
 
 
-       return response()->json(["agents"=>$agents,"properties" =>$properties,"total_agents"=>$total,"sales" =>$sales,"rents" =>$rents,"locations"=>[],"purpose"=>[],"bymonth"=>$bymonths,"ip"=> \Request::ip()]);
 
            }else{
             return response()->json(["sales" =>0,"rents" =>0,"agents"=>0]);
@@ -228,11 +379,50 @@ class DashboardController extends Controller
              
                 ->where('agent_id', $agent->id)
                 ->groupBy('purposes.name')
-                ->get();   
+                ->get(); 
+                
+                $groupdatabys=Property::join("propertydetails","propertydetails.property_id",'=',"properties.id")
+  ->join("purposes","purposes.id",'=',"propertydetails.purpose")
+  ->select(
+    
+   //  DB::raw("(Count(purposes.name)) as rent"),
+     DB::raw("(DATE_FORMAT(properties.created_at, '%Y-%m-%d')) as name")
+     )
+     ->orderBy('properties.created_at')
+    // ->where("purpose",1)
+     ->where('agent_id', $agent->id)
+     ->groupBy(DB::raw("DATE_FORMAT(properties.created_at, '%Y-%m-%d')"))
+     ->get();
 
 
-           return response()->json(["sales" =>$sales,"rents" =>$rents]);
-             }else{
+     
+
+
+
+foreach( $groupdatabys as  $groupdataby){
+
+
+     $groupdataby->rent = DB::table('properties')
+     ->join("propertydetails","propertydetails.property_id","=","properties.id")
+           ->select('purpose', DB::raw('COUNT(properties.id) as rent_count'))
+           ->where('propertydetails.purpose', 1)
+           ->where('agent_id', $agent->id)
+           ->where(DB::raw("DATE_FORMAT(properties.created_at, '%Y-%m-%d')"), $groupdataby->name)
+           ->groupBy('purpose')->get();
+
+           $groupdataby->sale = DB::table('properties')
+           ->join("propertydetails","propertydetails.property_id","=","properties.id")
+                 ->select('purpose', DB::raw('COUNT(properties.id) as sale_count'))
+                 ->where('propertydetails.purpose', 2)
+                 ->where('agent_id', $agent->id)
+                 ->where(DB::raw("DATE_FORMAT(properties.created_at, '%Y-%m-%d')"), $groupdataby->name)
+                 ->groupBy('purpose')->get();
+
+}
+
+
+                return response()->json(["agents"=>[],"properties" =>[],"total_agents"=>[],"sales" =>$sales,"rents" =>$rents,"locations"=>$locations,"purpose"=>$purpose,"groupdataby"=>$groupdatabys,"propertyviews"=> []]);
+              }else{
                 return response()->json(["sales" =>0,"rents" =>0]);
              }
          

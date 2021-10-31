@@ -19,10 +19,12 @@ class CountryController extends Controller
     public function agentinfo()
     {
         $nationality = Agent::join("countries","countries.id","=","agents.nationality")
+        ->join('propertylocations','propertylocations.agent_id','agents.id')
         ->distinct()
         ->get(array("countries.id","countries.country_enNationality","countries.country_arNationality"));
 
         $languages = Agent::join("agentlanguages","agentlanguages.agent_id","=","agents.id")
+        ->join('propertylocations','propertylocations.agent_id','agents.id')
         ->join("languages","languages.value","=","agentlanguages.language_id")
         ->distinct()
         ->get(array("languages.value as id","languages.label as language_en","languages.label_ar as language_ar"));

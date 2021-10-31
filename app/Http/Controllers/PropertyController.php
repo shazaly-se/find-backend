@@ -222,7 +222,7 @@ class PropertyController extends Controller
       ->where("properties.id",$id)
       ->first(array("properties.*","propertydetails.purpose","propertydetails.beds","propertydetails.baths","propertydetails.area",
       "propertydetails.rent_frequency","propertydetails.permitnumber","propertydetails.min_contract_period","propertydetails.vacating_period",
-      "propertydetails.maintainance_fee","propertydetails.paid_by",
+      "propertydetails.maintainance_fee","propertydetails.paid_by","propertydetails.furnishing",
       "categories.id as category_id","categories.name_en as category_name_en","categories.name_ar as category_name_ar",
       "propertytypes.id as propertytype_id","propertytypes.typeName_en","propertytypes.typeName_ar",
       "propertylocations.location_name_en as address","propertylocations.location_name_ar as address_ar","propertylocations.country_en","propertylocations.country_ar",

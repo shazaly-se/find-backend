@@ -11,7 +11,7 @@ use Validator;
 
 use Carbon\Carbon;
 //use Cache;
-
+use DB;
 class UserAuthController extends Controller
 {
 
@@ -35,8 +35,36 @@ class UserAuthController extends Controller
     }
 
     public function chatUsers(){
-        $users = User::all();
-        return response()->json(['users' => $users]);
+
+        $user = auth()->user();
+
+        if($user){
+
+            $users = DB::table("messages")->join("users","users.id","=","messages.reciever")
+            ->distinct()
+            
+            //->where("users.id","!=",)
+            // ->where(function ($query) use($id){
+            //     $query->where('reciever', $id)
+            //     ->orWhere('sender', $id); 
+            //    })
+      
+               ->where(function ($query1) use($user){
+                 $query1->where('reciever', $user->id)
+                 ->orWhere('sender', $user->id); 
+                })
+                ->orderBy("messages.created_at","desc")
+                ->get(array("users.*"));
+            // $users = User::distinct()->join("messages","messages.sender","users.id")
+             
+            // ->get();
+            return response()->json(["success"=>true,'users' => $users]);
+                  }
+        else{
+            return response()->json(["success"=>false,'msg' => "user does not exist"]);  
+        }
+
+       
 
     }
 

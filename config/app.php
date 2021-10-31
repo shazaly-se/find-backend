@@ -236,7 +236,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Str' => Illuminate\Support\Str::class,
-        'Location' => 'Stevebauman\Location\Facades\Location',
+        'Location' => Stevebauman\Location\Facades\Location::class,
 
 
     ],

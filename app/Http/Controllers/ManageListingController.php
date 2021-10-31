@@ -150,7 +150,7 @@ class ManageListingController extends Controller
         //return $propertydetails;
         $managelistings = Property::join('propertytypes','propertytypes.id','properties.propertytypes_id')
         ->join('agencies','agencies.id','properties.agency_id')
-        ->join('agents','agents.id','properties.agent_id')
+        ->leftJoin('agents','agents.id','properties.agent_id')
         ->join('status','status.id','properties.status_id')
         ->join('propertydetails','propertydetails.property_id','properties.id')
        ->join('propertylocations','propertylocations.property_id','properties.id')

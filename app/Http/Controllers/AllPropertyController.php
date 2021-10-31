@@ -9,6 +9,8 @@ use App\Models\Propertyfeature;
 use App\Models\Agency;
 use App\Models\Agent;
 use App\Models\Media;
+use App\Models\PropertyView;
+
 use App\Models\Propertylocation;
 use DB;
 class AllPropertyController extends Controller
@@ -52,13 +54,15 @@ class AllPropertyController extends Controller
                    }
 
     public function show($id){
+
+        $propertyviewed = new PropertyView;
         $property = Property::join('propertydetails','propertydetails.property_id','=','properties.id')
                                     ->join('propertylocations','propertylocations.property_id','=','properties.id')
                                     ->join('agents','agents.id','properties.agent_id')
                                     ->join('users','users.id','agents.user_id')
                                     ->join('propertytypes','propertytypes.id','properties.propertytypes_id')
                                     ->where('properties.id',$id)->with('location')->first(array('properties.*','propertydetails.beds',
-                'propertydetails.baths','propertydetails.area','propertydetails.purpose','agents.name_en as name_en',
+                'propertydetails.baths','propertydetails.area','propertydetails.purpose','agents.name_en as name_en',"users.id as user_id",
                 'agents.name_ar','agents.mobile','agents.email','agents.profile','propertytypes.typeName_en','propertytypes.typeName_ar'
              
             ));
@@ -76,6 +80,15 @@ class AllPropertyController extends Controller
                                    ->where('property_id',$property->id)->get();
 
         $medias= Media::where('property_id',$property->id)->get();
+       // $ip = $request->ip();
+        
+        $position = \Location::get('5.195.156.177');
+
+        $propertyviewed->property_id= $id;
+        $propertyviewed->ip_address= $position->ip;
+        $propertyviewed->country= $position->countryName;
+        $propertyviewed->save();
+
         return response()->json(["property" => $property,"amenities"=>$amenities,"medias"=>$medias,"similar" =>$similar]);
 
                                 }
@@ -148,6 +161,7 @@ class AllPropertyController extends Controller
         return $request->all();
     }
     public function location(){
+        
 
        $emirates= DB::table("propertylocations")->join("properties","properties.id","propertylocations.property_id")->distinct()
        ->get(array("propertylocations.emirate_en as location"));

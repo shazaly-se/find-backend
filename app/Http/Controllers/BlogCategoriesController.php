@@ -11,4 +11,7 @@ class BlogCategoriesController extends Controller
         $blogcategories = BlogCategory::all();
         return response()->json(["blogcategories" => $blogcategories]);
     }
+
+
+
 }

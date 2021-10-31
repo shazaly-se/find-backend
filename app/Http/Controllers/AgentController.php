@@ -130,6 +130,43 @@ class AgentController extends Controller
      
       }
 
+      public function fetchAgentsByLocation (Request $request){
+
+        $selectedLanguages = $request->selectedLanguages;
+        $langssArr = array();
+        if(count($request->selectedLanguages) > 0){
+          for($i=0;$i< count($selectedLanguages); $i++){
+              array_push($langssArr, $selectedLanguages[$i]['value']);
+          }
+        }
+
+
+        $agents = Agent::join('propertylocations','propertylocations.agent_id','agents.id')
+        ->join('users','users.id','agents.user_id')
+        ->join('countries','countries.id','agents.nationality')
+        ->leftJoin('agentlanguages','agentlanguages.agent_id','agents.id')
+        ->leftJoin('languages','languages.value','agentlanguages.language_id')
+        ->where(function ($query1) use($request){
+          if($request->selectedNationality > 0){ $query1->where('agents.nationality', $request->selectedNationality); }
+          if($request->selectedLocation  != null){ 
+           $query1->where('propertylocations.emirate_en','LIKE', '%'.$request->selectedLocation["location"].'%' )
+           ->orWhere('propertylocations.area_en','LIKE', '%'.$request->selectedLocation["location"].'%' )
+           ->orWhere('propertylocations.streetorbuild_en','LIKE', '%'.$request->selectedLocation["location"].'%' );
+          }
+        })
+
+        ->where(function ($query3) use($langssArr){
+          if(count($langssArr) > 0){ 
+              $query3->whereIn("agentlanguages.language_id", $langssArr); 
+          }
+       })->distinct()
+
+      ->orderBy("users.id","asc")
+        ->get(array("users.id as value","agents.name_en  as label"));
+        return response()->json(["agents" => $agents]);
+
+      }
+
       public function showagent($id)
       {
         $agent = Agent::join("users","users.id","=","agents.user_id")
